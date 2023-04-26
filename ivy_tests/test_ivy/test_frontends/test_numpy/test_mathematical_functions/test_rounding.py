@@ -1,3 +1,6 @@
+# global
+from hypothesis import strategies as st
+
 # local
 import ivy_tests.test_ivy.helpers as helpers
 import ivy_tests.test_ivy.test_frontends.test_numpy.helpers as np_frontend_helpers
@@ -13,7 +16,6 @@ from ivy_tests.test_ivy.helpers import handle_frontend_test
                 available_dtypes=helpers.get_dtypes("float"),
             )
         ],
-        get_dtypes_kind="float",
     ),
     where=np_frontend_helpers.where(),
     number_positional_args=np_frontend_helpers.get_num_positional_args_ufunc(
@@ -59,7 +61,6 @@ def test_numpy_ceil(
                 available_dtypes=helpers.get_dtypes("float"),
             )
         ],
-        get_dtypes_kind="float",
     ),
     where=np_frontend_helpers.where(),
     number_positional_args=np_frontend_helpers.get_num_positional_args_ufunc(
@@ -131,7 +132,6 @@ def test_numpy_fix(
                 available_dtypes=helpers.get_dtypes("float"),
             )
         ],
-        get_dtypes_kind="float",
     ),
     where=np_frontend_helpers.where(),
     number_positional_args=np_frontend_helpers.get_num_positional_args_ufunc(
@@ -177,7 +177,6 @@ def test_numpy_trunc(
                 available_dtypes=helpers.get_dtypes("float"),
             )
         ],
-        get_dtypes_kind="float",
     ),
     where=np_frontend_helpers.where(),
 )
@@ -215,9 +214,9 @@ def test_numpy_rint(
 @handle_frontend_test(
     fn_tree="numpy.around",
     dtype_and_x=helpers.dtype_and_values(
-        available_dtypes=helpers.get_dtypes("float"),
+        available_dtypes=helpers.get_dtypes("numeric"),
     ),
-    decimals=helpers.ints(min_value=0, max_value=5),
+    decimals=st.integers(min_value=0, max_value=5),
 )
 def test_numpy_around(
     *,

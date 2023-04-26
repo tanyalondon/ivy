@@ -1832,7 +1832,7 @@ def equal(
 @handle_nestable
 @handle_exceptions
 def exp(
-    x: Union[ivy.Array, ivy.NativeArray],
+    x: Union[ivy.Array, ivy.NativeArray, Number],
     /,
     *,
     out: Optional[ivy.Array] = None,
@@ -1867,13 +1867,57 @@ def exp(
         in ``x``. The returned array must have a floating-point data type determined by
         :ref:`type-promotion`.
 
+    This method conforms to the
+    `Array API Standard <https://data-apis.org/array-api/latest/>`_.
+    This docstring is an extension of the
+    `docstring <https://data-apis.org/array-api/latest/API_specification/generated/signatures.elementwise_functions.exp.html>`_  # noqa
+    in the standard.
+
+    Both the description and the type hints above assumes an array input for simplicity,
+    but this function is *nestable*, and therefore also accepts :class:`ivy.Container`
+    instances in place of any of the arguments.
+
     Examples
     --------
+    With :class:Number:
+
+    >>> x = 3
+    >>> y = ivy.exp(x)
+    >>> print(y)
+    ivy.array(20.08553692)
+
+    With :class:`ivy.Array` input:
+
     >>> x = ivy.array([1., 2., 3.])
     >>> y = ivy.exp(x)
     >>> print(y)
-    ivy.array([2.72,7.39,20.1])
+    ivy.array([ 2.71828175,  7.38905621, 20.08553696])
 
+    With nested inputs in :class:`ivy.Array`:
+
+    >>> x = ivy.array([[-5.67], [ivy.nan], [0.567]])
+    >>> y = ivy.exp(x)
+    >>> print(y)
+    ivy.array([[0.00344786],
+           [       nan],
+           [1.76297021]])
+
+    With :class:`ivy.NativeArray` input:
+
+    >>> x = ivy.native_array([0., 4., 2.])
+    >>> y = ivy.exp(x)
+    >>> print(y)
+    ivy.array([ 1.        , 54.59814835,  7.38905621])
+
+    With :class:`ivy.Container` input:
+
+    >>> x = ivy.Container(a=3.1, b=ivy.array([3.2, 1.]))
+    >>> y = ivy.exp(x)
+    >>> print(y)
+    {
+        a: ivy.array(22.197948),
+        b: ivy.array([24.53253174, 2.71828175])
+    }
     """
     return ivy.current_backend(x).exp(x, out=out)
 
@@ -4235,6 +4279,7 @@ def round(
     x: Union[ivy.Array, ivy.NativeArray],
     /,
     *,
+    decimals: Optional[int] = 0,
     out: Optional[ivy.Array] = None,
 ) -> ivy.Array:
     """Rounds each element ``x_i`` of the input array ``x`` to the nearest
@@ -4258,6 +4303,8 @@ def round(
     ----------
     x
         input array containing elements to round.
+    decimals
+        number of decimal places to round to. Default is ``0``.
     out
         optional output array, for writing the result to. It must have a shape that the
         inputs broadcast to.
@@ -4318,7 +4365,7 @@ def round(
         b:ivy.array([-301.,-527.,4.])
     }
     """
-    return ivy.current_backend(x).round(x, out=out)
+    return ivy.current_backend(x).round(x, decimals=decimals, out=out)
 
 
 @handle_array_function
