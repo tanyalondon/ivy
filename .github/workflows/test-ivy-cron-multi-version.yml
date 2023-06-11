@@ -1,4 +1,4 @@
-name: test-ivy-cron-multi-version
+name:
 on:
   workflow_dispatch:
   schedule:
